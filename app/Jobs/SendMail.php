@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Exception;
 
 class SendMail implements ShouldQueue
 {
@@ -28,6 +29,11 @@ class SendMail implements ShouldQueue
      */
     public function handle(RegisterService $registerService): void
     {
-        $registerService->sendMail($this->email);
+        try{
+            $registerService->sendMail($this->email);
+        }catch(Exception $e)
+        {
+            formatErrorLog($e);
+        }
     }
 }

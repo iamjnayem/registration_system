@@ -28,6 +28,10 @@ class RegisterService
         $this->emailService = $emailService;
     }
 
+
+    /**
+     * push email to redis and dispatch a job to process the request
+     */
     public function register($request)
     {
 
@@ -50,6 +54,9 @@ class RegisterService
 
     }
 
+    /**
+     * fetch data from redis queue and dispatch Email queue.
+     */
     public function fetchFromCache()
     {
 
@@ -83,33 +90,41 @@ class RegisterService
 
     public function sendMail($email)
     {
-        $data = [
-            'email' => $email,
-            'registration_status' => RegistrationStatusEnum::REQUESTED,
-        ];
+        try{
+            $data = [
+                'email' => $email,
+                'registration_status' => RegistrationStatusEnum::REQUESTED,
+            ];
+    
+            $requestedUser = $this->registeredUserRepository->getOne($data);
+    
+            $to = $email;
+            $subject = 'Registration Confirmation';
+            $body = 'Welcome to Gigalogy xyz service.';
+    
+            $isMailSent = $this->emailService->sendMail($to, $subject, $body);
+    
+            if($isMailSent == false)
+            {
+                $requestedUser->is_email_sent = EmailSentStatusEnum::FAILED;
+                Log::error("Sending Email to " . $email . " has failed.");
+            }
+    
+            else if ($isMailSent == true)
+            {
+                $requestedUser->is_email_sent = EmailSentStatusEnum::SENT;
+                Log::error("Sending Email to " . $email . " has succeed.");
+            }
+    
+            $requestedUser->registration_status = RegistrationStatusEnum::ACTIVATED;
+            $requestedUser->save();
 
-        $requestedUser = $this->registeredUserRepository->getOne($data);
-
-        $to = $email;
-        $subject = 'Registration Confirmation';
-        $body = 'Welcome to Gigalogy xyz service.';
-
-        $isMailSent = $this->emailService->sendMail($to, $subject, $body);
-
-        if($isMailSent == false)
+        }catch(Exception $e)
         {
-            $requestedUser->is_email_sent = EmailSentStatusEnum::FAILED;
-            Log::error("Sending Email to " . $email . " has failed.");
+            formatErrorLog($e);
+            return;
+        
         }
-
-        else if ($isMailSent == true)
-        {
-            $requestedUser->is_email_sent = EmailSentStatusEnum::SENT;
-            Log::error("Sending Email to " . $email . " has succeed.");
-        }
-
-        $requestedUser->registration_status = RegistrationStatusEnum::ACTIVATED;
-        $requestedUser->save();
 
         
     }

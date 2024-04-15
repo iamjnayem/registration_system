@@ -17,6 +17,11 @@ class RegisterController extends Controller
         $this->registerService = $registerService;
     }
 
+
+
+    /**
+     * register controller to handle registration request
+     */
     public function register(RegistrationRequest $request)
     {
         try{
