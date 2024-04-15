@@ -12,12 +12,15 @@ Sends email when a http post request is made to {{base_url}}/register route. It 
 # Instructions to run:
 
 1. clone the repository `git clone https://github.com/iamjnayem/registration_system.git`
-2. copy .env.example to .env
-3. run `composer install`
-4. run `php artisan migrate`
-5. run `php artisan serve`
-6. run `php artisan queue:work --queue=process_registration_request`
-7. run `php artisan queue:work --queue=send_email_queue`
+2. create database user as postgres
+3. create database user password as lolipop1
+4. create database as subscribe_system
+5. copy .env.example to .env
+6. run `composer install`
+7. run `php artisan migrate`
+8. run `php artisan serve`
+9. run `php artisan queue:work --queue=process_registration_request`
+10. run `php artisan queue:work --queue=send_email_queue`
 
 # Api End point:
 
