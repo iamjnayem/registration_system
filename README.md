@@ -20,7 +20,7 @@ Sends email when a http post request is made to {{base_url}}/register route. It 
 7. run `php artisan migrate`
 8. run `php artisan serve`
 9. run `php artisan queue:work --queue=process_registration_request`
-10. run `php artisan queue:work --queue=send_email_queue`
+10. run `php artisan queue:work --queue=send_mail_queue`
 
 # Api End point:
 
