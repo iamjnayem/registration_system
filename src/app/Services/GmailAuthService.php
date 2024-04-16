@@ -62,7 +62,7 @@ class GmailAuthService
                 }
                 file_put_contents($this->tokenFile, json_encode($client->getAccessToken()));
             }
-            Log::info(var_dump($client));
+           
 
             return $client;
         } catch (Exception $e) {
