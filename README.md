@@ -38,6 +38,18 @@ have to manage outside of the actual code. If you use windows as os, you should 
 
 11. `nohup php artisan queue:work --queue=process_registration_request > db.log & nohup php artisan queue:work --queue=send_mail_queue > mail.log`
 
+12. [go to] (http://localhost:38000)
+  
+13. 13. api route: (http://localhost:38000/api/register) (method post)
+
+14. payload
+```
+{
+  "email": "iamj.nayem@gmail.com"
+}
+```
+
+
 # Improvements
   1. The migration & queue running command can be made automatic within Dockerfile. 
   2. Unit test can be written.
